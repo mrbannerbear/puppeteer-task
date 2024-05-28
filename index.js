@@ -1,12 +1,13 @@
 import puppeteer from 'puppeteer-core';
+import { executablePath } from 'puppeteer-core';
 
 (async () => {
     // Launch the browser and open a new blank page
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({executablePath: executablePath("chrome")});
     const page = await browser.newPage();
   
     // Navigate the page to a URL
-    await page.goto('https://developer.chrome.com/');
+    await page.goto('https://google..com/');
   
     // Set screen size
     await page.setViewport({width: 1080, height: 1024});
@@ -28,5 +29,5 @@ import puppeteer from 'puppeteer-core';
     // Print the full title
     console.log('The title of this blog post is "%s".', fullTitle);
   
-    await browser.close();
+    // await browser.close();
   })();
