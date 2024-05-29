@@ -8,30 +8,28 @@ import { executablePath } from "puppeteer-core";
   const page = await browser.newPage();
 
   await page.goto("https://www.google.com/");
-  // #APjFqb
+
 
   const inputValue = await page.evaluate(() => {
-    return document.getElementById("APjFqb").value = "cow";
+    return document.getElementById("APjFqb").value = "javascript";
   });
 
-  await page.type(inputValue)
+  await page.type("#APjFqb", inputValue);
 
-  // Set screen size
-  await page.setViewport({ width: 1080, height: 1024 });
+  await Promise.all([
+    page.waitForNavigation(), 
+    page.keyboard.press('Enter'),
+  ]);
 
-  // Wait and click on first result
-  const searchResultSelector = ".devsite-result-item-link";
-  await page.waitForSelector(searchResultSelector);
-  await page.click(searchResultSelector);
+   const results = await page.evaluate(() => {
+    const elements = document.querySelectorAll("div > div > div > div > div > div > div > span > a > h3")
+    return Array.from(elements).map(each => each.textContent);
+  });
 
-  // Locate the full title with a unique string
-  const textSelector = await page.waitForSelector(
-    "text/Customize and automate"
-  );
-  const fullTitle = await textSelector?.evaluate((el) => el.textContent);
 
-  // Print the full title
-  console.log('The title of this blog post is "%s".', fullTitle);
+  results.forEach((result) => {
+    console.log(`${result}`);
+  });
 
   await browser.close();
 })();
